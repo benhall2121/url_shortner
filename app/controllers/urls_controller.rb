@@ -8,6 +8,33 @@ class UrlsController < ApplicationController
   def show
   end
 
+  def show_by_short_link
+    # Check if to go to the show page or be redirected
+    go_to_show_page = params[:short_link][-1] == "+" ? true : false
+    # If there is a plus sign remove it from the short link
+    params[:short_link].slice!(params[:short_link].length-1,params[:short_link].length) if go_to_show_page
+    # Search for the url
+    @check_url = Url.where(:short_link => params[:short_link])
+
+    # A url should not be saved twice but if it is, use the first one
+    @url = @check_url.first
+
+    if !@check_url.empty? && !go_to_show_page
+      # Track the number of times (clicks) users have used this url
+      current_users_ip_address = request.remote_ip
+      c = Click.new(:ip_address => current_users_ip_address, :url_id => @url.id)
+      c.save
+      # redirect to original url
+      redirect_to @url.long_url
+    elsif @check_url.empty?
+      # If the url is not found, go to the homepage
+      flash[:notice] = 'URL not found'
+      redirect_to root_path
+    end
+
+    # Go to the show_by_short_link page
+  end
+
   def new
     @url = Url.new
   end
@@ -28,7 +55,7 @@ class UrlsController < ApplicationController
 
       if !@url.empty?
         @return_hash[:url] = @url.first
-        @return_hash[:response] = "This url has previously been shortened to #{request.protocol}#{request.host_with_port}#{request.fullpath}#{@url.first.short_link}."
+        @return_hash[:response] = "This url has previously been shortened to #{getBaseUrl}#{@url.first.short_link}."
       else
         # Create a short url
         @url = Url.new
@@ -37,7 +64,7 @@ class UrlsController < ApplicationController
 
         if @url.save
           @return_hash[:url] = @url
-          @return_hash[:response] = "The new url created is: #{@url.short_link}."
+          @return_hash[:response] = "The new url created is: #{getBaseUrl}#{@url.short_link}."
         end
       end
     end
@@ -78,13 +105,24 @@ class UrlsController < ApplicationController
       params.require(:url).permit(:long_url, :short_link)
     end
 
+    def getBaseUrl
+      base_url = request.protocol + request.host_with_port + "/"
+      # Default Base Url
+      base_url = "https://sho-url.herokuapp.com/" if base_url == ""
+
+      return base_url
+    end
+
     def getShortUrl
-      total_url = Url.all.count
+      # Get the length of all the current urls
+      # This will give us the shortest optimal link
+      total_url = Math.log10(Url.all.count).to_i + 1
+
       token = ""
 
       loop do
         token_range = (rand((total_url+1)..(total_url+3))/2)
-        # SecureRandom.hex is returning twice as many as token_range. Because of that, we are dividing by two
+        # SecureRandom.hex is returning twice as many as total_url. Because of that, we are dividing by two
         token = SecureRandom.hex( token_range )
         break token unless Url.where(short_link: token).exists?
       end
