@@ -14,7 +14,7 @@ class UrlsController < ApplicationController
     # If there is a plus sign remove it from the short link
     params[:short_link].slice!(params[:short_link].length-1,params[:short_link].length) if go_to_show_page
     # Search for the url
-    @check_url = Url.where(:short_link => params[:short_link])
+    @check_url = Url.where('lower(short_link) = ?', params[:short_link].downcase)
 
     # A url should not be saved twice but if it is, use the first one
     @url = @check_url.first
