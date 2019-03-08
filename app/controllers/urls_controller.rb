@@ -1,44 +1,52 @@
 class UrlsController < ApplicationController
   before_action :set_url, only: [:show, :edit, :update, :destroy]
 
-  # GET /urls
-  # GET /urls.json
   def index
     @urls = Url.all
   end
 
-  # GET /urls/1
-  # GET /urls/1.json
   def show
   end
 
-  # GET /urls/new
   def new
     @url = Url.new
   end
 
-  # GET /urls/1/edit
   def edit
   end
 
-  # POST /urls
-  # POST /urls.json
   def create
-    @url = Url.new(url_params)
+    @return_hash = {:response => "", :url => nil }
+    
+    # Check if url is valid
+    link = URI.parse(params[:url][:long_url]) rescue false
+    if !link.kind_of?(URI::HTTP) && !link.kind_of?(URI::HTTPS)
+      @return_hash[:response] = "Not a valid url"
+    else
+      # Check and return url it it already exists
+      @url = Url.where("long_url = ?", params[:url][:long_url])
+
+      if !@url.empty?
+        @return_hash[:url] = @url.first
+        @return_hash[:response] = "This url has previously been shortened to #{request.protocol}#{request.host_with_port}#{request.fullpath}#{@url.first.short_link}."
+      else
+        # Create a short url
+        @url = Url.new
+        @url.long_url = params[:url][:long_url]
+        @url.short_link = getShortUrl
+
+        if @url.save
+          @return_hash[:url] = @url
+          @return_hash[:response] = "The new url created is: #{@url.short_link}."
+        end
+      end
+    end
 
     respond_to do |format|
-      if @url.save
-        format.html { redirect_to @url, notice: 'Url was successfully created.' }
-        format.json { render :show, status: :created, location: @url }
-      else
-        format.html { render :new }
-        format.json { render json: @url.errors, status: :unprocessable_entity }
-      end
+      format.js { render partial: 'new'}
     end
   end
 
-  # PATCH/PUT /urls/1
-  # PATCH/PUT /urls/1.json
   def update
     respond_to do |format|
       if @url.update(url_params)
@@ -51,8 +59,6 @@ class UrlsController < ApplicationController
     end
   end
 
-  # DELETE /urls/1
-  # DELETE /urls/1.json
   def destroy
     @url.destroy
     respond_to do |format|
@@ -70,5 +76,19 @@ class UrlsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def url_params
       params.require(:url).permit(:long_url, :short_link)
+    end
+
+    def getShortUrl
+      total_url = Url.all.count
+      token = ""
+
+      loop do
+        token_range = (rand((total_url+1)..(total_url+3))/2)
+        # SecureRandom.hex is returning twice as many as token_range. Because of that, we are dividing by two
+        token = SecureRandom.hex( token_range )
+        break token unless Url.where(short_link: token).exists?
+      end
+
+      return token
     end
 end

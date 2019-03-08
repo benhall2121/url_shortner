@@ -1,0 +1,1 @@
+$(".notice_wrapper").html("<%= @return_hash[:response] %><%= ' To view the stats for this link ' if !@return_hash[:url].nil? %><%= escape_javascript(link_to('click here', url_path(@return_hash[:url].id))) if !@return_hash[:url].nil? %>");
