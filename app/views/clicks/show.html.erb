@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Ip address:</strong>
+  <%= @click.ip_address %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @click.url_id %>
+</p>
+
+<%= link_to 'Edit', edit_click_path(@click) %> |
+<%= link_to 'Back', clicks_path %>

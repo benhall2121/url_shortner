@@ -1,0 +1,26 @@
+# Development
+development:
+  adapter: postgresql
+  database: dev_url_shortner
+  username: application
+  password: root
+  host: localhost
+  port: 5432
+
+# Production
+production:
+  adapter: postgresql
+  database: url_shortner
+  username: application
+  password: 212134
+  host: localhost
+  port: 5432
+
+# Staging
+staging:
+  adapter: postgresql
+  database: staging_url_shortner
+  username: staging_url_shortner
+  password: 212134
+  host: localhost
+  port: 5432
