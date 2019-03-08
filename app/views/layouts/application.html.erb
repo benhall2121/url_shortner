@@ -1,16 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>UrlShortener</title>
+  <title>Shortener</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="bg-primary text-white text-center">
 
-<div id="notice"><%= notice %></div>
+<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+    <div class="container">
+  	  <%= link_to "Shortening", root_path(), :class => "navbar-brand" %>
+      
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item mx-0 mx-lg-1">
+  	  		<%= link_to "URLs", urls_path(), :class => "nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-<%= yield %>
+
+
+<div class="container" style="margin-top:130px; margin-bottom:130px;">
+  <div id="notice"><%= notice %></div>
+
+  <%= yield %>
+</div>
+
+
+
+<!-- Footer -->
+  <footer class="footer text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-5 mb-lg-0">
+          <h4 class="text-uppercase mb-4">Location</h4>
+          <p class="lead mb-0">9985 SW Ledgestone CT
+            <br>Beaverton OR, 97007</p>
+        </div>
+        <div class="col-md-6 mb-5 mb-lg-0">
+          <h4 class="text-uppercase mb-4">Around the Web</h4>
+          <ul class="list-inline mb-0">
+            <li class="list-inline-item">
+              <%= link_to '<i class="fa fa-twitter" style="font-size:25px; margin-top:5px;"></i>'.html_safe, "https://twitter.com/benhall2121", :class => "btn btn-outline-light btn-social text-center rounded-circle" %>
+            </li>
+            <li class="list-inline-item">
+              <%= link_to '<i class="fa fa-linkedin" style="font-size:25px; margin-top:4px;"></i>'.html_safe, "https://www.linkedin.com/in/benhall2121/", :class => "btn btn-outline-light btn-social text-center rounded-circle" %>
+            </li>
+            <li class="list-inline-item">
+              <%= link_to '<i class="fa fa-github" style="font-size:25px; margin-top:4px;"></i>'.html_safe, "https://github.com/benhall2121", :class => "btn btn-outline-light btn-social text-center rounded-circle" %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+
 
 </body>
 </html>

@@ -1,0 +1,19 @@
+<div class="container">
+  <h2 class="text-center text-uppercase text-secondary mb-0"><%= @url.long_url %></h2>
+  <hr class="mb-5" style="width:25%;">
+  <div class="row">
+    <div class="col-lg-5 mx-auto" style="text-align:left;">
+    	<b>Short Link:</b> <span class="text-secondary"><%= full_short_link(@url.short_link) %></span>
+    	<br />
+      	<b>Clicks:</b> <span class="text-secondary"><%= @url.clicks.count %></span>
+    </div>
+    <div class="col-lg-7 mx-auto">
+    	CLICKS GRAPH
+    	<%= line_chart @url.clicks.collect{|x| x.created_at.strftime("%m/%d/%Y")}.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }  %>
+    </div>
+  </div>
+</div>
+
+
+
+
