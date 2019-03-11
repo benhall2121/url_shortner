@@ -3,9 +3,32 @@
   <hr class="mb-5" style="width:25%;">
   <div class="row">
     <div class="col-lg-5 mx-auto" style="text-align:left;">
-    	<b>Short Link:</b> <span class="text-secondary"><%= full_short_link(@url.short_link) %></span>
-    	<br />
-      	<b>Clicks:</b> <span class="text-secondary"><%= @url.clicks.count %></span>
+      <div>
+      	<b>Short Link:</b> <span class="text-secondary"><%= full_short_link(@url.short_link) %></span>
+      	<br />
+        <b>Clicks:</b> <span class="text-secondary" id="toggle_ip_address_table_wrapper"><%= @url.clicks.count %></span>
+      </div>
+      
+      <div class="ip_address_table_wrapper" style="display:none;">
+        <table class="shorten_table" style="margin-left:0px;">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>IP Address</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @url.clicks.sort_by(&:created_at).reverse.each do |click| %>
+              <tr>
+                <td><%= click.created_at.strftime("%m/%d/%Y %H:%M") %></td>
+                <td><%= click.ip_address %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="col-lg-7 mx-auto">
     	CLICKS GRAPH

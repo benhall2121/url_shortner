@@ -33,6 +33,8 @@ gem 'bootstrap', '~> 4.3.1'
 gem "font-awesome-rails"
 
 gem "chartkick"
+# Get the location of clicks by ip address
+gem 'geocoder'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

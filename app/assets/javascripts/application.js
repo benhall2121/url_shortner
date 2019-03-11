@@ -16,3 +16,11 @@
 //= require chartkick
 //= require turbolinks
 //= require_tree .
+
+
+
+$(document).ready(function(){
+	$('#toggle_ip_address_table_wrapper').click(function(){
+		$(".ip_address_table_wrapper").toggle();
+	})
+})
