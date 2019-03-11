@@ -15,7 +15,8 @@
             <tr>
               <th>Date</th>
               <th>IP Address</th>
-              <th></th>
+              <th>Address</th>
+              <th>Latitude, Longitude </th>
             </tr>
           </thead>
 
@@ -24,6 +25,8 @@
               <tr>
                 <td><%= click.created_at.strftime("%m/%d/%Y %H:%M") %></td>
                 <td><%= click.ip_address %></td>
+                <td><%= link_to click.full_address, click.google_map_link, target: :_blank %></td>
+                <td><%= link_to "#{click.latitude}, #{click.longitude}", click.google_map_link, target: :_blank if !click.latitude.nil? %></td>
               </tr>
             <% end %>
           </tbody>
