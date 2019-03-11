@@ -15,7 +15,7 @@ class Click < ApplicationRecord
 	after_validation :geocode, :if => :ip_address_changed?
 
     def full_address
-      add = self.address
+      add = self.address if !self.address.nil?
       add += " " if !add.blank?
       add += self.city if !self.city.nil?
       add += ", " if !add.blank? && !self.city.blank?
