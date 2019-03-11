@@ -12,7 +12,7 @@ class Click < ApplicationRecord
             obj.longitude   = geo.longitude
         end
     end
-	after_validation :geocode, :if => :ip_address_changed?
+	after_validation :geocode
 
     def full_address
       add = self.address if !self.address.nil?
