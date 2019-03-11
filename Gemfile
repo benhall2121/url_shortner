@@ -35,8 +35,6 @@ gem "font-awesome-rails"
 gem "chartkick"
 # Get the location of clicks by ip address
 gem 'geocoder'
-# Logging
-gem 'rails_12factor'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
